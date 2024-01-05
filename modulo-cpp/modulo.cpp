@@ -10,6 +10,36 @@
 #include <string>
 using namespace std;
 
+bool leapYearValidation(int y);
+bool validation(string n);
+int moduloCalculator(string n);
+string getDay(int h);
+
+int main()
+{
+  int h;
+  string day, date;
+
+  // get user input
+  do
+  {
+    cout << endl
+         << "Enter your birthday (yyyymmdd): ";
+    cin >> date;
+  } while (validation(date) == false);
+
+  // call calculator
+  h = moduloCalculator(date);
+
+  // get the day
+  day = getDay(h);
+
+  cout << "The day was " << day << "." << endl
+       << endl;
+
+  return 0;
+}
+
 bool leapYearValidation(int y)
 {
   if (y % 4 == 0)
@@ -141,31 +171,6 @@ string getDay(int h)
   }
 
   return day;
-}
-
-int main()
-{
-  int h;
-  string day, date;
-
-  // get user input
-  do
-  {
-    cout << endl
-         << "Enter your birthday (yyyymmdd): ";
-    cin >> date;
-  } while (validation(date) == false);
-
-  // call calculator
-  h = moduloCalculator(date);
-
-  // get the day
-  day = getDay(h);
-
-  cout << "The day was " << day << "." << endl
-       << endl;
-
-  return 0;
 }
 
 /**
