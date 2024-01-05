@@ -10,26 +10,74 @@
 #include <string>
 using namespace std;
 
-int main()
+bool leapYearValidation(int y)
 {
-  int b, y, m, d, mid, h, k, j;
-  string day;
+  if (y % 4 == 0)
+  {
+    if (y % 100 == 0)
+    {
+      if (y % 400 == 0)
+        return true;
+      else
+        return false;
+    }
+    else
+      return true;
+  }
+}
 
-  cout << endl
-       << "Enter your birthday (yyyymmdd): ";
-  cin >> b;
+bool validation(string n)
+{
+  // validate if the number of characters are exactry 8 digits
+  int length = n.length();
+  if(length != 8)
+  {
+    cout << endl;
+    cout << "Invalid input." << endl;
+    cout << "Enter your birth date in format yyyymmdd." << endl;
+    return false;
+  }
 
-  y = b / 10000;
-  k = y % 100;
-  j = y / 100;
-  mid = b % 10000;
-  m = mid / 100;
-  d = mid % 100;
+  // validate if the input is number.
+  for (char c : n)
+  {
+    if (!isdigit(c))
+    {
+      cout << endl;
+      cout << "Invalid input." << endl;
+      cout << "Enter your birth date in format yyyymmdd." << endl;
+      return false;
+    }
+  }
 
-  cout << "Year: " << y << " (" << j << ", " << k << ")"
-       << ", Month: " << m << ", Day: " << d << endl;
+  int y = stoi(n.substr(0, 4)); // year
+  int j = stoi(n.substr(0, 2));
+  int k = stoi(n.substr(2, 2));
+  int m = stoi(n.substr(4, 2)); // month
+  int d = stoi(n.substr(6, 2)); // day
 
-  // Modulo Formula
+  // leap year validation
+  bool leap = leapYearValidation(y);
+
+  if ((m <= 0 || d <= 0 || m > 12 || d > 31) || (leap == true && m == 2 && d >= 30) || (leap == false && m == 2 && d >= 29))
+  {
+    cout << "Invalid input." << endl;
+    cout << "Enter valid month or day." << endl;
+    return false;
+  }
+  return true;
+}
+
+int moduloCalculator(string n)
+{
+  int h;
+  int y = stoi(n.substr(0, 4)); // year
+  int j = stoi(n.substr(0, 2));
+  int k = stoi(n.substr(2, 2));
+  int m = stoi(n.substr(4, 2)); // month
+  int d = stoi(n.substr(6, 2)); // day
+
+  // modulo formula
   h = (d + ((13 * (m + 1)) / 5) + k + (k / 4) + (j / 4) - (2 * j)) % 7;
 
   if (h < 0)
@@ -59,8 +107,14 @@ int main()
     }
   }
 
-  cout << "h: " << h << endl;
+  cout << "Year: " << y << ", Month: " << m << ", Day: " << d << endl;
 
+  return h;
+}
+
+string getDay(int h)
+{
+  string day;
   switch (h)
   {
   case 0:
@@ -85,6 +139,28 @@ int main()
     day = "Friday";
     break;
   }
+
+  return day;
+}
+
+int main()
+{
+  int h;
+  string day, date;
+
+  // get user input
+  do
+  {
+    cout << endl
+         << "Enter your birthday (yyyymmdd): ";
+    cin >> date;
+  } while (validation(date) == false);
+
+  // call calculator
+  h = moduloCalculator(date);
+
+  // get the day
+  day = getDay(h);
 
   cout << "The day was " << day << "." << endl
        << endl;
